@@ -32,13 +32,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
 </head>
+<style>
+    body {
+        background-color: #f8f9fa;
+        font-family: Arial, sans-serif;
+        background-image: url('img/002.gif');
+        background-size: cover;
+        background-repeat: no-repeat;
+
+    }
+    .container {
+        max-width: 500px;
+        margin-top: 100px;
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0,0, 0.1);
+    }
+    .alert {
+        margin-top: 20px;
+    }
+    .form-label {
+        font-weight: bold;
+    }
+    .btn-danger {
+        width: 100%;
+    }
+    .btn-link {
+        text-decoration: none;
+        color: #007bff;
+    }
+    .btn-link:hover {
+        text-decoration: underline;
+    }
+    .form-control {
+        margin-bottom: 15px;
+    }
+    .row {
+        margin-bottom: 15px;
+    }
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .alert-success {
+        text-align: center;
+    }
+    
+</style>
 
 <body>
 
@@ -62,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="password" name="password" id="password" class="form-control" required>
             </div>
             <div class="col-12">
-                <button type="submit" class="btn btn-success">เข้าสู่ระบบ</button>
+                <button type="submit" class="btn btn-danger">เข้าสู่ระบบ</button>
                 <a href="register.php" class="btn btn-link">สมัครสมาชิก</a>
             </div>
         </form>
