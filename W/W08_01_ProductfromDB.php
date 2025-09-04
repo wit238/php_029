@@ -96,7 +96,7 @@ require_once 'W07_01_ConnectDB.php';
         crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
     <script>
-        let table = new DataTable('#productTable');
+        let table = new DataTable('#');
     </script>
 </body>
 

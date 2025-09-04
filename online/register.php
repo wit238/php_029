@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error[] = "กรุณากรอกข้อมูลให้ครบทุกช่อง";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         // ตรวจสอบว่าอีเมลถูกต้องหรือไม่ (filter_var)
-        $error[] = "อีเมลไม่ถูกต ้อง";
+        $error[] = "อีเมลไม่ถูกต้อง";
 
     } elseif ($password !== $confirm_password) {
         // ตรวจสอบว่ารหัสผ่านตรงกันหรือไม่
