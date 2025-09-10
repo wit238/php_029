@@ -43,161 +43,133 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$username, $fullname, $email, $hashedPassword]);
 
         // ถ้าบันทึกสำเร็จ ให้เปลี่ยนเส้นทางไปหน้า login
-        header("Location: login.php ?register=success");
+        header("Location: login.php?register=success");
         
         exit(); // หยุดการทำงานของสคริปต์หลังจากเปลี่ยนเส้นทาง
     }
 }
 ?>
-
-
 <!DOCTYPE html>
-<html lang="en">
-    <head>  
-        <meta charset="UTF-8">
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>register</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
+    <title>สมัครสมาชิก - The Shop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
 
     <style>
         body {
             background-color: #f8f9fa;
-            background-image: url('img/002.gif');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 100vh;
-          
+            font-family: 'Kanit', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
-        .container {
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
-            margin: auto;
 
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
+
+        .navbar-brand {
+            font-weight: 500;
         }
-        .form-label {
-            font-weight: bold;
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 0;
         }
-        .btn-link {
-            text-decoration: none;
-            color: #007bff;
-        }
-        .btn-link:hover {
-            text-decoration: underline;
-        }
-        .btn-primary {
+
+        .register-card {
             width: 100%;
+            max-width: 700px; /* Wider card for registration form */
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
-        .form-control {
-            margin-bottom: 15px;
-        }
-        .row {
-            margin-bottom: 15px;
-        }
-        .mb-4 {
-            margin-bottom: 1.5rem !important;
-        }
-        .mb-3 {
-            margin-bottom: 1rem !important;
-        }
-        .mb-5 {
-            margin-bottom: 3rem !important;
-        }
-        .mt-5 {
-            margin-top: 3rem !important;
-        }
-        .col-md-6 {
-            padding: 0 10px;
-        }
-        .col-6 {
-            padding: 0 10px;
-        }
-        .form-control:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
-        }
-        .form-control {
-            border-radius: 0.25rem;
+
+        .footer {
+            background-color: #343a40;
+            color: #f8f9fa;
+            padding: 2rem 0;
         }
     </style>
-
 </head>
 <body>
-    <div class="container mt-5">
-        <h2 class="mb-4">สมัครสมาชิก</h2>
 
-        <?php if (!empty($error)): // ถ ้ำมีข ้อผิดพลำด ให้แสดงข ้อควำม ?>
-            <div class="alert alert-danger">
-                <ul>
-                    <?php foreach ($error as $e): ?>
-                        <li><?= htmlspecialchars($e) ?></li>
-                        <!-- ใช ้ htmlspecialchars เพื่อป้องกัน XSS -->
-                        <!-- < ?=คือ short echo tag ?> -->
-                        <!-- ถ ้ำเขียนเต็ม จะได ้แบบด ้ำนล่ำง -->
-                        <?php // echo "<li>" . htmlspecialchars($e) . "</li>"; ?>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        <?php endif; ?>
-
-
-         <form method="post">
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="username" class="form-label">ชื่อผู้ใช้</label>
-                <input type="text" class="form-control" id="username" name="username" placeholder="ชื่อผู้ใช้"
-                 value=<?= isset($_POST['username']) ? htmlspecialchars($_POST['username']) : '' ?>>
-            </div>
-            <div class="col-md-6">
-                <label for="fullname" class="form-label">ชื่อ-นามสกุล</label>
-                <input type="text" class="form-control" id="fullname"  name="fullname" placeholder="ชื่อ-นามสกุล"
-                 value=<?= isset($_POST['username']) ? htmlspecialchars($_POST['username']) : '' ?>>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <div class="container">
+            <a class="navbar-brand" href="index.php"><i class="bi bi-gem"></i> The Shop</a>
+            <div class="ms-auto">
+                <a href="login.php" class="btn btn-outline-dark btn-sm">เข้าสู่ระบบ</a>
             </div>
         </div>
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="email" class="form-label">อีเมล</label>
-                <input type="email" class="form-control" id="email" placeholder="อีเมล" name="email"
-                 value=<?= isset($_POST['username']) ? htmlspecialchars($_POST['username']) : '' ?>>
-            </div>
-            <div class="col-md-6">
-                <label for="password" class="form-label">รหัสผ่าน</label>
-                <input type="password" class="form-control" id="password" placeholder="รหัสผ่าน" name="password">
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="card register-card">
+            <div class="card-body p-4 p-md-5">
+                <h2 class="card-title text-center mb-4">สร้างบัญชีใหม่</h2>
+
+                <?php if (!empty($error)): ?>
+                    <div class="alert alert-danger">
+                        <?php foreach ($error as $e): ?>
+                            <div><?= htmlspecialchars($e) ?></div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+
+                <form method="post">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="username" class="form-label">ชื่อผู้ใช้</label>
+                            <input type="text" class="form-control" id="username" name="username" required value="<?= htmlspecialchars($_POST['username'] ?? '') ?>">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="fullname" class="form-label">ชื่อ-นามสกุล</label>
+                            <input type="text" class="form-control" id="fullname" name="fullname" required value="<?= htmlspecialchars($_POST['fullname'] ?? '') ?>">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">อีเมล</label>
+                        <input type="email" class="form-control" id="email" name="email" required value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label for="password" class="form-label">รหัสผ่าน</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label for="confirm_password" class="form-label">ยืนยันรหัสผ่าน</label>
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-dark btn-lg">สมัครสมาชิก</button>
+                    </div>
+                </form>
+                <div class="text-center mt-4">
+                    <p class="text-muted">มีบัญชีอยู่แล้ว? <a href="login.php">เข้าสู่ระบบที่นี่</a></p>
+                </div>
             </div>
         </div>
-        <div class="row mb-4">
-            <div class="col-6">
-                <label for="confirm_password" class="form-label">ยืนยันรหัสผ่าน</label>
-                <input type="password" class="form-control" id="confirm_password" placeholder="ยืนยันรหัสผ่าน" name="confirm_password">
-            </div>
-        </div>
-
-
-        <button type="submit" class="btn btn-primary">สมัครสมาชิก</button>
-        <a href="login.php" class= "btn btn-link">เข้าสู่ระบบ</a>
-
-    </form>
-</div>
-        </form>
-
     </div>
-    </form>
 
-    </div>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container text-center">
+            <p>&copy; 664230029 Witthawat CH. 66/46</p>
+        </div>
+    </footer>
 
-
-
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        crossorigin="anonymous"></script>
-    </body>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
