@@ -41,7 +41,7 @@ $isLoggedIn  = isset($_SESSION['user_id']);
 
     <style>
         body {
-            background-color: #f8f9fa;
+            background-color: #343a40;
             font-family: 'Kanit', sans-serif;
             display: flex;
             flex-direction: column;

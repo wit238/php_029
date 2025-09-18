@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 require_once '../config.php'; // เชื่อมต่อฐานข้อมูล
 require_once 'auth_admin.php'; // ตรวจสอบการเข้าสู่ระบบผู้ดูแลระบบ 
@@ -108,13 +109,13 @@ require_once 'auth_admin.php'; // ตรวจสอบการเข้าส�
             </a>
         </div>
         <div class="col-md-6 col-lg-3">
-            <a href="#" class="menu-card"> <!-- Placeholder for categories.php -->
+            <a href="categories.php" class="menu-card"> <!-- Placeholder for categories.php -->
                 <i class="bi bi-tags-fill"></i>
                 <h5>จัดการหมวดหมู่</h5>
             </a>
         </div>
         <div class="col-md-6 col-lg-3">
-            <a href="#" class="menu-card"> <!-- Placeholder for products.php -->
+            <a href="products.php" class="menu-card"> <!-- Placeholder for products.php -->
                 <i class="bi bi-box-seam-fill"></i>
                 <h5>จัดการสินค้า</h5>
             </a>

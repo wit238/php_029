@@ -29,7 +29,7 @@ $isLoggedIn  = isset($_SESSION['user_id']); // ตรวจสอบว่าผ
 
     <style>
         body {
-            background-color: #f8f9fa;
+            background-color: #e4e6e7ff;
             font-family: 'Kanit', sans-serif;
             display: flex;
             flex-direction: column;
@@ -53,7 +53,7 @@ $isLoggedIn  = isset($_SESSION['user_id']); // ตรวจสอบว่าผ
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
             transition: all 0.3s ease;
-            overflow: hidden;
+            overflow: hidden; /* Important for the zoom effect */
         }
 
         .product-card:hover {
@@ -62,8 +62,13 @@ $isLoggedIn  = isset($_SESSION['user_id']); // ตรวจสอบว่าผ
         }
 
         .product-img {
-            height: 220px;
+            height: 200px;
             object-fit: cover;
+            transition: transform 0.3s ease; /* Add transition for smooth zoom */
+        }
+
+        .product-card:hover .product-img {
+            transform: scale(1.05); /* Zoom in on hover */
         }
 
         .product-img-placeholder {
@@ -141,28 +146,18 @@ $isLoggedIn  = isset($_SESSION['user_id']); // ตรวจสอบว่าผ
                 <?php foreach ($products as $product): ?>
                     <div class="col-md-6 col-lg-4 mb-4">
                         <div class="card product-card h-100">
-                                                        <?php
-                                $image_to_display = '';
-                                if (strpos($product['product_name'], 'เสื้อยืดคอกลม') !== false) {
-                                    $image_to_display = 'sh1.png';
-                                } elseif (strpos($product['product_name'], 'หูฟังไร้สาย') !== false) {
-                                    $image_to_display = 'Hp.png';
-                                } elseif (strpos($product['product_name'], 'สมุด') !== false) {
-                                    $image_to_display = 'book.png';
-                                } elseif (!empty($product['image'])) {
-                                    $image_to_display = $product['image'];
-                                }
-
-                                if (!empty($image_to_display)):
+                            <?php
+                                // กำหนด path ของรูปภาพสำรอง
+                                $placeholder_image = 'img/placeholder.png';
+                                // ใช้ path จากฐานข้อมูลโดยตรง ถ้ามี, ถ้าไม่มีก็ใช้ placeholder
+                                $product_image = !empty($product['image_url']) ? htmlspecialchars($product['image_url']) : $placeholder_image;
                             ?>
-                                <img src="img/<?= htmlspecialchars($image_to_display) ?>" class="card-img-top product-img" alt="<?= htmlspecialchars($product['product_name'] == 'เสื้อยืดสีขาวคอกลม' ? 'เสื้อยืดสีดำคอกลม' : $product['product_name']) ?>">
-                            <?php else: ?>
-                                <div class="product-img-placeholder">
-                                    <i class="bi bi-image-alt fs-1"></i>
-                                </div>
-                            <?php endif; ?>
+                            <img src="<?= $product_image ?>"
+                                 class="card-img-top product-img"
+                                 alt="<?= htmlspecialchars($product['product_name']) ?>"
+                                 onerror="this.onerror=null; this.src='<?= $placeholder_image ?>';">
                             <div class="card-body d-flex flex-column">
-                                <h5 class="card-title"><?= htmlspecialchars($product['product_name'] == 'เสื้อยืดสีขาวคอกลม' ? 'เสื้อยืดสีดำคอกลม' : $product['product_name']) ?></h5>
+                                <h5 class="card-title"><?= htmlspecialchars($product['product_name']) ?></h5>
                                 <h6 class="card-subtitle mb-2 text-muted"><?= htmlspecialchars($product['category_name']) ?></h6>
                                 <p class="card-text text-muted small flex-grow-1"><?= nl2br(htmlspecialchars($product['description'])) ?></p>
                                 <div class="d-flex justify-content-between align-items-center">

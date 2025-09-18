@@ -149,29 +149,19 @@ $isLoggedIn  = isset($_SESSION['user_id']);
                 <a href="index.php" class="btn btn-outline-secondary btn-sm mb-4"><i class="bi bi-arrow-left"></i> กลับไปหน้าร้าน</a>
                 <div class="row align-items-center">
                     <div class="col-md-6">
-                                                <?php
-                            $image_to_display = '';
-                            if (strpos($product['product_name'], 'เสื้อยืดคอกลม') !== false) {
-                                $image_to_display = 'Sh1.png';
-                            } elseif (strpos($product['product_name'], 'หูฟังไร้สาย') !== false) {
-                                $image_to_display = 'Hp.png';
-                            } elseif (strpos($product['product_name'], 'สมุด') !== false) {
-                                $image_to_display = 'book.png';
-                            } elseif (!empty($product['image'])) {
-                                $image_to_display = $product['image'];
-                            }
-
-                            if (!empty($image_to_display)):
+                        <?php
+                            // Define the placeholder image path
+                            $placeholder_image = 'img/placeholder.png';
+                            // Use the image_url from the database if available, otherwise use the placeholder
+                            $product_image = !empty($product['image_url']) ? htmlspecialchars($product['image_url']) : $placeholder_image;
                         ?>
-                            <img src="img/<?= htmlspecialchars($image_to_display) ?>" class="product-image" alt="<?= htmlspecialchars($product['product_name'] == 'เสื้อยืดสีดำคอกลม' ? 'เสื้อยืดสีดำคอกลม' : $product['product_name']) ?>">
-                        <?php else: ?>
-                            <div class="product-image-placeholder">
-                                <i class="bi bi-image-alt fs-1"></i>
-                            </div>
-                        <?php endif; ?>
+                        <img src="<?= $product_image ?>"
+                             class="product-image"
+                             alt="<?= htmlspecialchars($product['product_name']) ?>"
+                             onerror="this.onerror=null; this.src='<?= $placeholder_image ?>';">
                     </div>
                     <div class="col-md-6">
-                        <h1 class="product-title mt-4 mt-md-0"><?= htmlspecialchars($product['product_name'] == 'เสื้อยืดสีดำคอกลม' ? 'เสื้อยืดสีดำคอกลม' : $product['product_name']) ?></h1>
+                        <h1 class="product-title mt-4 mt-md-0"><?= htmlspecialchars($product['product_name']) ?></h1>
                         <p class="product-category">หมวดหมู่: <?= htmlspecialchars($product['category_name']) ?></p>
                         <p class="lead mt-3"><?= nl2br(htmlspecialchars($product['description'])) ?></p>
                         <p class="product-price">฿<?= number_format($product['price'], 2) ?></p>
