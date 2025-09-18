@@ -1,0 +1,136 @@
+<?php
+session_start();
+require_once 'config.php';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username_or_email = trim($_POST['username_or_email']);
+    $password = $_POST['password'];
+
+    $sql = "SELECT * FROM users WHERE (username = ? OR email = ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([$username_or_email, $username_or_email]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($user && password_verify($password, $user['password'])) {
+        $_SESSION['user_id'] = $user['user_id'];
+        $_SESSION['username'] = $user['username'];
+        $_SESSION['role'] = $user['role'];
+
+        if ($user['role'] === 'admin'){
+            header("Location: admin/index.php");
+        } else {
+            header("Location: index.php");
+        }
+        exit();
+    } else {
+        $error = "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
+    }
+}
+$isLoggedIn  = isset($_SESSION['user_id']);
+?>
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เข้าสู่ระบบ - The Shop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #343a40;
+            font-family: 'Kanit', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .navbar-brand {
+            font-weight: 500;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 550px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .footer {
+            background-color: #343a40;
+            color: #f8f9fa;
+            padding: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <div class="container">
+            <a class="navbar-brand" href="index.php"><i class="bi bi-gem"></i> The Shop</a>
+            <div class="ms-auto">
+                <a href="register.php" class="btn btn-dark btn-sm">สมัครสมาชิก</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="card login-card">
+            <div class="card-body p-5">
+                <h2 class="card-title text-center mb-4">เข้าสู่ระบบ</h2>
+
+                <?php if (isset($_GET['register']) && $_GET['register'] === 'success'): ?>
+                    <div class="alert alert-success">สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบ</div>
+                <?php endif; ?>
+
+                <?php if (!empty($error)): ?>
+                    <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
+                <?php endif;?>
+
+                <form method="post">
+                    <div class="mb-3">
+                        <label for="username_or_email" class="form-label">ชื่อผู้ใช้หรืออีเมล</label>
+                        <input type="text" name="username_or_email" id="username_or_email" class="form-control" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="password" class="form-label">รหัสผ่าน</label>
+                        <input type="password" name="password" id="password" class="form-control" required>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-dark btn-lg">เข้าสู่ระบบ</button>
+                    </div>
+                </form>
+                <div class="text-center mt-4">
+                    <p class="text-muted">ยังไม่มีบัญชี? <a href="register.php">สมัครสมาชิกที่นี่</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container text-center">
+            <p>&copy; 664230029 Witthawat CH. 66/46</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
