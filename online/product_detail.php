@@ -125,22 +125,7 @@ $isLoggedIn  = isset($_SESSION['user_id']);
 </head>
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
-        <div class="container">
-            <a class="navbar-brand" href="index.php"><i class="bi bi-gem"></i> The Shop</a>
-            <div class="ms-auto">
-                <?php if ($isLoggedIn): ?>
-                    <a href="profile.php" class="btn btn-outline-secondary btn-sm"><i class="bi bi-person-circle"></i> ข้อมูลส่วนตัว</a>
-                    <a href="cart.php" class="btn btn-dark btn-sm"><i class="bi bi-cart-fill"></i> ดูตะกร้า</a>
-                    <a href="logout.php" class="btn btn-outline-danger btn-sm"><i class="bi bi-box-arrow-right"></i> ออกจากระบบ</a>
-                <?php else: ?>
-                    <a href="login.php" class="btn btn-outline-dark btn-sm">เข้าสู่ระบบ</a>
-                    <a href="register.php" class="btn btn-dark btn-sm">สมัครสมาชิก</a>
-                <?php endif; ?>
-            </div>
-        </div>
-    </nav>
+    <?php require_once 'navbar.php'; ?>
 
     <!-- Main Content -->
     <div class="main-content">

@@ -186,6 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="container mt-4">
+    <?php require_once 'navbar.php'; ?>
     <div class="content-container">
         <h2><i class="bi bi-pencil-square"></i> แก้ไขข้อมูลสมาชิก</h2>
         <a href="users.php" class="btn btn-secondary mb-3"><i class="bi bi-arrow-left"></i> กลับหน้ารายชื่อสมาชิก</a>

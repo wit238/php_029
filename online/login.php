@@ -80,15 +80,7 @@ $isLoggedIn  = isset($_SESSION['user_id']);
 </head>
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white">
-        <div class="container">
-            <a class="navbar-brand" href="index.php"><i class="bi bi-gem"></i> The Shop</a>
-            <div class="ms-auto">
-                <a href="register.php" class="btn btn-dark btn-sm">สมัครสมาชิก</a>
-            </div>
-        </div>
-    </nav>
+    <?php require_once 'navbar.php'; ?>
 
     <!-- Main Content -->
     <div class="main-content">

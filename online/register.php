@@ -103,15 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white">
-        <div class="container">
-            <a class="navbar-brand" href="index.php"><i class="bi bi-gem"></i> The Shop</a>
-            <div class="ms-auto">
-                <a href="login.php" class="btn btn-outline-dark btn-sm">เข้าสู่ระบบ</a>
-            </div>
-        </div>
-    </nav>
+    <?php require_once 'navbar.php'; ?>
 
     <!-- Main Content -->
     <div class="main-content">
