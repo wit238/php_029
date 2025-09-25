@@ -29,7 +29,11 @@ $isLoggedIn  = isset($_SESSION['user_id']); // ตรวจสอบว่าผ
 
     <style>
         body {
-            background-color: #e4e6e7ff;
+            background-color: #e4e6e7ff; /* Fallback color */
+            background-image: url('img/background.jpg'); /* Placeholder image */
+            background-size: cover; /* Cover the entire background */
+            background-attachment: fixed; /* Keep background fixed when scrolling */
+            background-repeat: no-repeat; /* Do not repeat the image */
             font-family: 'Kanit', sans-serif;
             display: flex;
             flex-direction: column;
@@ -49,21 +53,24 @@ $isLoggedIn  = isset($_SESSION['user_id']); // ตรวจสอบว่าผ
         }
 
         .product-card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            overflow: hidden; /* Important for the zoom effect */
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+            overflow: hidden;
         }
 
         .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1), 0 6px 6px rgba(0,0,0,0.15);
         }
 
         .product-img {
-            height: 200px;
-            object-fit: cover;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 4 / 3;
+            object-fit: contain;
             transition: transform 0.3s ease; /* Add transition for smooth zoom */
         }
 
@@ -72,7 +79,9 @@ $isLoggedIn  = isset($_SESSION['user_id']); // ตรวจสอบว่าผ
         }
 
         .product-img-placeholder {
-            height: 200px;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 4 / 3;
             background-color: #e9ecef;
             display: flex;
             align-items: center;
@@ -139,6 +148,16 @@ $isLoggedIn  = isset($_SESSION['user_id']); // ตรวจสอบว่าผ
                                 <h5 class="card-title"><?= htmlspecialchars($product['product_name']) ?></h5>
                                 <h6 class="card-subtitle mb-2 text-muted"><?= htmlspecialchars($product['category_name']) ?></h6>
                                 <p class="card-text text-muted small flex-grow-1"><?= nl2br(htmlspecialchars($product['description'])) ?></p>
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="text-warning">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-half"></i>
+                                    </div>
+                                    <span class="ms-2 text-muted small">(<?= rand(25, 300) ?> รีวิว)</span>
+                                </div>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <p class="product-price mb-0">฿<?= number_format($product['price'], 2) ?></p>
                                     <a href="product_detail.php?id=<?=$product['product_id'] ?>" class="btn btn-outline-dark btn-sm">ดูรายละเอียด</a>

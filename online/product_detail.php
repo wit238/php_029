@@ -157,7 +157,7 @@ $isLoggedIn  = isset($_SESSION['user_id']);
                                 <div class="d-flex align-items-center">
                                     <label for="quantity" class="me-3">จำนวน:</label>
                                     <input type="number" name="quantity" id="quantity" class="form-control quantity-input me-3" value="1" min="1" max="<?= (int)$product['stock'] ?>" required>
-                                    <button type="submit" class="btn btn-dark btn-add-to-cart"><i class="bi bi-cart-plus-fill"></i> เพิ่มลงตะกร้า</button>
+                                    <button type="submit" name="add_to_cart" class="btn btn-dark btn-add-to-cart"><i class="bi bi-cart-plus-fill"></i> เพิ่มลงตะกร้า</button>
                                 </div>
                                 <p class="text-muted mt-2">มีสินค้าทั้งหมด: <?= htmlspecialchars($product['stock']) ?> ชิ้น</p>
                             </form>
