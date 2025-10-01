@@ -1,3 +1,4 @@
+
 <?php
 
 session_start();
@@ -23,38 +24,8 @@ require_once 'auth_admin.php'; // ตรวจสอบการเข้าส�
         font-family: 'Kanit', sans-serif;
         background-color: #f4f7f6;
     }
-
-    .content-container {
-        background-color: #ffffff;
-        padding: 40px;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        margin-top: 50px;
-        margin-bottom: 50px;
-    }
-
-    .header-wrapper {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding-bottom: 15px;
-        border-bottom: 2px solid #e0e0e0;
-        margin-bottom: 20px;
-    }
-
-    h2 {
-        color: #2c3e50;
-        font-weight: 600;
-        margin: 0;
-    }
-
-    .welcome-message {
-        font-size: 1.1rem;
-        color: #555;
-    }
-
     .menu-card {
-        background-color: #f8f9fa;
+        background-color: #ffffff;
         border: 1px solid #e9ecef;
         border-radius: 10px;
         padding: 25px;
@@ -64,42 +35,35 @@ require_once 'auth_admin.php'; // ตรวจสอบการเข้าส�
         color: #34495e;
         display: block;
         height: 100%;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
-
     .menu-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-        background-color: #3498db;
+        background-color: #343a40;
         color: #fff;
     }
-
     .menu-card i {
         font-size: 3rem;
         margin-bottom: 15px;
     }
-
     .menu-card h5 {
         font-weight: 500;
         margin: 0;
     }
-
-    .logout-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-    }
-
 </style>
 </head>
 <body>
 
-<div class="container content-container">
-    <div class="header-wrapper">
-        <h2><i class="bi bi-shield-lock-fill"></i> แผงควบคุมผู้ดูแลระบบ</h2>
-        <a href="../logout.php" class="btn btn-outline-danger logout-btn"><i class="bi bi-box-arrow-right"></i> ออกจากระบบ</a>
+<?php include 'navbar.php'; ?>
+
+<div class="container mt-5">
+    <div class="p-4 mb-4 bg-light rounded-3">
+        <div class="container-fluid py-3">
+            <h1 class="display-5 fw-bold">Dashboard</h1>
+            <p class="col-md-8 fs-4">ยินดีต้อนรับ, <strong><?= htmlspecialchars($_SESSION['username']) ?></strong>! เลือกเมนูเพื่อเริ่มการจัดการระบบหลังบ้าน</p>
+        </div>
     </div>
-    
-    <p class="welcome-message mb-4">ยินดีต้อนรับ, <strong><?= htmlspecialchars($_SESSION['username']) ?></strong></p>
     
     <div class="row gy-4">
         <div class="col-md-6 col-lg-3">
@@ -109,19 +73,19 @@ require_once 'auth_admin.php'; // ตรวจสอบการเข้าส�
             </a>
         </div>
         <div class="col-md-6 col-lg-3">
-            <a href="categories.php" class="menu-card"> <!-- Placeholder for categories.php -->
+            <a href="categories.php" class="menu-card">
                 <i class="bi bi-tags-fill"></i>
                 <h5>จัดการหมวดหมู่</h5>
             </a>
         </div>
         <div class="col-md-6 col-lg-3">
-            <a href="products.php" class="menu-card"> <!-- Placeholder for products.php -->
+            <a href="products.php" class="menu-card">
                 <i class="bi bi-box-seam-fill"></i>
                 <h5>จัดการสินค้า</h5>
             </a>
         </div>
         <div class="col-md-6 col-lg-3">
-            <a href="#" class="menu-card"> <!-- Placeholder for orders.php -->
+            <a href="orders.php" class="menu-card">
                 <i class="bi bi-receipt-cutoff"></i>
                 <h5>จัดการคำสั่งซื้อ</h5>
             </a>
