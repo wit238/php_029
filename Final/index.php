@@ -44,7 +44,10 @@ require_once 'configs.php';
                     <th>Last Name</th>
                     <th>Email</th>
                     <th>Phone</th>
+                    <th>age</th>
+                    <th>Time</th>
                     <th>Actions</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -54,9 +57,14 @@ require_once 'configs.php';
                         <td><?= htmlspecialchars($row['id']) ?></td>
                         <td><?= htmlspecialchars($row['Fname']) ?></td>
                         <td><?= htmlspecialchars($row['Lname']) ?></td>
-                        <td><?= htmlspecialchars($row['Email']) ?></td>
+                        <td><?= htmlspecialchars($row['email']) ?></td>
                         <td><?= htmlspecialchars($row['Tel']) ?></td>
-                        
+                        <td><?= htmlspecialchars($row['age']) ?></td>
+                        <td><?= htmlspecialchars($row['Creation time']) ?></td>
+                        <td>
+                            <a href="edit.php?id=<?= $row['id'] ?>" class="btn btn-warning btn-sm">แก้ไข</a>
+                            <a href="delete.php?id=<?= $row['id'] ?>" class="btn btn-danger btn-sm delete-btn">ลบ</a>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -73,9 +81,9 @@ require_once 'configs.php';
         $(document).ready(function() {
             new DataTable('#productTable');
 
-            // Handle delete button click
+         
             $('.delete-btn').on('click', function(e) {
-                e.preventDefault(); // Prevent default link behavior
+                e.preventDefault(); 
                 const deleteUrl = $(this).attr('href');
 
                 Swal.fire({
@@ -89,7 +97,6 @@ require_once 'configs.php';
                     cancelButtonText: 'ยกเลิก'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // If confirmed, redirect to the delete URL
                         window.location.href = deleteUrl;
                     }
                 });

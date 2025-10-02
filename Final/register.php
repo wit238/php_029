@@ -1,40 +1,45 @@
 <?php
 require_once 'configs.php';
 
+$error = []; // ตัวแปรสำหรับเก็บ error
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
+    // Get form data
     $id = trim($_POST['id']);
     $Fname = $_POST['Fname'];
     $Lname = $_POST['Lname'];
     $email = trim($_POST['email']);
     $Tel = $_POST['Tel'];
+    $age = $_POST['age'];
 
-
-    if (empty($id) || empty($Fname) || empty($Lname) || empty($email) || empty($Tel) ) {
+    // ตรวจสอบว่ากรอกข้อมูลมาครบหรือไม่ (emtry)
+    if (empty($id) || empty($Fname) || empty($Lname) || empty($email) || empty($Tel) || empty($age) ) {
         $error[] = "กรุณากรอกข้อมูลให้ครบทุกช่อง";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-      
+        // ตรวจสอบว่าอีเมลถูกต้องหรือไม่ (filter_var)
         $error[] = "อีเมลไม่ถูกต้อง";
 
     } else {
-      
+        // ตรวจสอบว่าชื่อผู้ใช้หรืออีเมลถูกใช้ไปแล้วหรือไม่
         $sql = "SELECT * FROM tb_664230029 WHERE id = ? OR email = ?";
         $stmt = $conn->prepare($sql);
         $stmt->execute([$id, $email]);
 
-
+        if ($stmt->rowCount() > 0) {
+            $error[] = "รหัสนักศึกษาหรืออีเมลนี้ถูกใช้ไปแล้ว"; 
+        }
     }
 
-    if (empty($error)) { 
+    if (empty($error)) { // ถ้าไม่มีข้อผิดพลาดใดๆ
 
-        $sql = "INSERT INTO tb_664230029(id, Fname, Lname, email, Tel) VALUES (?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO tb_664230029(id, Fname, Lname, email, Tel , age) VALUES (?, ?, ?, ?, ? ,?)";
         $stmt = $conn->prepare($sql);
-        $stmt->execute([$id, $Fname, $Lname, $email, $Tel]);
+        $stmt->execute([$id, $Fname, $Lname, $email, $Tel, $age]);
 
+        // ถ้าบันทึกสำเร็จ ให้เปลี่ยนเส้นทางไปหน้า index
         header("Location: index.php?register=success");
         
-        exit(); 
+        exit(); // หยุดการทำงานของสคริปต์หลังจากเปลี่ยนเส้นทาง
     }
 
 
@@ -112,6 +117,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="Tel" class="form-label">เบอร์โทร</label>
                 <input type="tel" name="Tel" class="form-control" id="Tel" placeholder="08XXXXXXXX"
                     value="<?= isset($_POST['Tel']) ? htmlspecialchars($_POST['Tel']) : '' ?>" required>
+            </div>
+            <div class="mb-3">
+                <label for="age" class="form-label">อายุ</label>
+                <input type="age" name="age" class="form-control" id="age" placeholder="อายุ"
+                    value="<?= isset($_POST['age']) ? htmlspecialchars($_POST['age']) : '' ?>" required>
             </div>
             <div class="d-flex justify-content-between mt-4">
                 <a href="index.php" class="btn btn-secondary">ดูรายการ</a>
