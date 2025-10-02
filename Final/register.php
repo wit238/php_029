@@ -5,25 +5,25 @@ $error = []; // ตัวแปรสำหรับเก็บ error
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get form data
-    $id = trim($_POST['id']);
-    $Fname = $_POST['Fname'];
-    $Lname = $_POST['Lname'];
-    $email = trim($_POST['email']);
+    $std_id = trim($_POST['std_id']);
+    $f_name = $_POST['f_name'];
+    $l_name = $_POST['l_name'];
+    $mail = trim($_POST['mail']);
     $Tel = $_POST['Tel'];
     $age = $_POST['age'];
 
     // ตรวจสอบว่ากรอกข้อมูลมาครบหรือไม่ (emtry)
-    if (empty($id) || empty($Fname) || empty($Lname) || empty($email) || empty($Tel) || empty($age) ) {
+    if (empty($std_id) || empty($f_name) || empty($l_name) || empty($mail) || empty($Tel) || empty($age) ) {
         $error[] = "กรุณากรอกข้อมูลให้ครบทุกช่อง";
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    } elseif (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
         // ตรวจสอบว่าอีเมลถูกต้องหรือไม่ (filter_var)
         $error[] = "อีเมลไม่ถูกต้อง";
 
     } else {
         // ตรวจสอบว่าชื่อผู้ใช้หรืออีเมลถูกใช้ไปแล้วหรือไม่
-        $sql = "SELECT * FROM tb_664230029 WHERE id = ? OR email = ?";
+        $sql = "SELECT * FROM tb_664230029 WHERE std_id = ? OR mail = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->execute([$id, $email]);
+        $stmt->execute([$std_id, $mail]);
 
         if ($stmt->rowCount() > 0) {
             $error[] = "รหัสนักศึกษาหรืออีเมลนี้ถูกใช้ไปแล้ว"; 
@@ -32,9 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($error)) { // ถ้าไม่มีข้อผิดพลาดใดๆ
 
-        $sql = "INSERT INTO tb_664230029(id, Fname, Lname, email, Tel , age) VALUES (?, ?, ?, ?, ? ,?)";
+        $sql = "INSERT INTO tb_664230029(std_id, f_name, l_name, mail, Tel , age) VALUES (?, ?, ?, ?, ? ,?)";
         $stmt = $conn->prepare($sql);
-        $stmt->execute([$id, $Fname, $Lname, $email, $Tel, $age]);
+        $stmt->execute([$std_id, $f_name, $l_name, $mail, $Tel, $age]);
 
         // ถ้าบันทึกสำเร็จ ให้เปลี่ยนเส้นทางไปหน้า index
         header("Location: index.php?register=success");
@@ -94,24 +94,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <form action="" method="post">
             <div class="mb-3">
-                <label for="id" class="form-label">รหัสนักศึกษา</label>
-                <input type="number" name="id" class="form-control" id="id" placeholder="เช่น 664230029"
-                    value="<?= isset($_POST['id']) ? htmlspecialchars($_POST['id']) : '' ?>" required>
+                <label for="std_id" class="form-label">รหัสนักศึกษา</label>
+                <input type="number" name="std_id" class="form-control" id="std_id" placeholder="เช่น 664230029"
+                    value="<?= isset($_POST['std_id']) ? htmlspecialchars($_POST['std_id']) : '' ?>" required>
             </div>
             <div class="mb-3">
-                <label for="Fname" class="form-label">ชื่อ</label>
-                <input type="text" name="Fname" class="form-control" id="Fname" placeholder="ชื่อ"
-                    value="<?= isset($_POST['Fname']) ? htmlspecialchars($_POST['Fname']) : '' ?>" required>
+                <label for="f_name" class="form-label">ชื่อ</label>
+                <input type="text" name="f_name" class="form-control" id="f_name" placeholder="ชื่อ"
+                    value="<?= isset($_POST['f_name']) ? htmlspecialchars($_POST['f_name']) : '' ?>" required>
             </div>
             <div class="mb-3">
-                <label for="Lname" class="form-label">นามสกุล</label>
-                <input type="text" name="Lname" class="form-control" id="Lname" placeholder="นามสกุล"
-                    value="<?= isset($_POST['Lname']) ? htmlspecialchars($_POST['Lname']) : '' ?>" required>
+                <label for="l_name" class="form-label">นามสกุล</label>
+                <input type="text" name="l_name" class="form-control" id="l_name" placeholder="นามสกุล"
+                    value="<?= isset($_POST['l_name']) ? htmlspecialchars($_POST['l_name']) : '' ?>" required>
             </div>
             <div class="mb-3">
-                <label for="email" class="form-label">อีเมล</label>
-                <input type="email" name="email" class="form-control" id="email" placeholder="example@email.com"
-                    value="<?= isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '' ?>" required>
+                <label for="mail" class="form-label">อีเมล</label>
+                <input type="email" name="mail" class="form-control" id="mail" placeholder="example@email.com"
+                    value="<?= isset($_POST['mail']) ? htmlspecialchars($_POST['mail']) : '' ?>" required>
             </div>
             <div class="mb-3">
                 <label for="Tel" class="form-label">เบอร์โทร</label>

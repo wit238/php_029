@@ -54,16 +54,16 @@ require_once 'configs.php';
                 <?php foreach ($data as $index => $row): ?>
                     <tr>
                         <td><?= $index + 1 ?></td>
-                        <td><?= htmlspecialchars($row['id']) ?></td>
-                        <td><?= htmlspecialchars($row['Fname']) ?></td>
-                        <td><?= htmlspecialchars($row['Lname']) ?></td>
-                        <td><?= htmlspecialchars($row['email']) ?></td>
+                        <td><?= htmlspecialchars($row['std_id']) ?></td>
+                        <td><?= htmlspecialchars($row['f_name']) ?></td>
+                        <td><?= htmlspecialchars($row['l_name']) ?></td>
+                        <td><?= htmlspecialchars($row['mail']) ?></td>
                         <td><?= htmlspecialchars($row['Tel']) ?></td>
                         <td><?= htmlspecialchars($row['age']) ?></td>
-                        <td><?= htmlspecialchars($row['Creation time']) ?></td>
+                        <td><?= htmlspecialchars($row['Creation_at']) ?></td>
                         <td>
-                            <a href="edit.php?id=<?= $row['id'] ?>" class="btn btn-warning btn-sm">แก้ไข</a>
-                            <a href="delete.php?id=<?= $row['id'] ?>" class="btn btn-danger btn-sm delete-btn">ลบ</a>
+                            <a href="edit.php?id=<?= $row['key'] ?>" class="btn btn-warning btn-sm">แก้ไข</a>
+                            <a href="delete.php?id=<?= $row['key'] ?>" class="btn btn-danger btn-sm delete-btn">ลบ</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

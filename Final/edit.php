@@ -1,35 +1,36 @@
 <?php
 require_once 'configs.php';
 
-$student_id = '';
-$Fname = '';
-$Lname = '';
-$email = '';
+$student_key = '';
+$std_id = '';
+$f_name = '';
+$l_name = '';
+$mail = '';
 $Tel = '';
 $age = '';
 $error = [];
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $student_id = $_POST['id'];
-    $Fname = $_POST['Fname'];
-    $Lname = $_POST['Lname'];
-    $email = trim($_POST['email']);
+    $student_key = $_POST['id'];
+    $f_name = $_POST['f_name'];
+    $l_name = $_POST['l_name'];
+    $mail = trim($_POST['mail']);
     $Tel = $_POST['Tel'];
     $age = trim($_POST['age']);
 
  
-    if (empty($Fname) || empty($Lname) || empty($email) || empty($Tel) || empty($age)) {
+    if (empty($f_name) || empty($l_name) || empty($mail) || empty($Tel) || empty($age)) {
         $error[] = "กรุณากรอกข้อมูลให้ครบทุกช่อง";
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    } elseif (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
         $error[] = "รูปแบบอีเมลไม่ถูกต้อง";
     }
 
     if (empty($error)) {
         try {
-            $sql = "UPDATE tb_664230029 SET Fname = ?, Lname = ?, email = ?, Tel = ?, age = ? WHERE id = ?";
+            $sql = "UPDATE tb_664230029 SET f_name = ?, l_name = ?, mail = ?, Tel = ?, age = ? WHERE `key` = ?";
             $stmt = $conn->prepare($sql);
-            $stmt->execute([$Fname, $Lname, $email, $Tel, $age, $student_id]);
+            $stmt->execute([$f_name, $l_name, $mail, $Tel, $age, $student_key]);
 
             header("Location: index.php?update=success");
             exit();
@@ -40,17 +41,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } 
 
 else if (isset($_GET['id'])) {
-    $student_id = $_GET['id'];
+    $student_key = $_GET['id'];
     try {
-        $sql = "SELECT * FROM tb_664230029 WHERE id = ?";
+        $sql = "SELECT * FROM tb_664230029 WHERE `key` = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->execute([$student_id]);
+        $stmt->execute([$student_key]);
         $student = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($student) {
-            $Fname = $student['Fname'];
-            $Lname = $student['Lname'];
-            $email = $student['email'];
+            $std_id = $student['std_id'];
+            $f_name = $student['f_name'];
+            $l_name = $student['l_name'];
+            $mail = $student['mail'];
             $Tel = $student['Tel'];
             $age = $student['age'];
         } else {
@@ -81,7 +83,7 @@ else if (isset($_GET['id'])) {
 </head>
 <body>
     <div class="container mt-5">
-        <h2 class="text-center mb-4">แก้ไขข้อมูลนักศึกษา (ID: <?= htmlspecialchars($student_id) ?>)</h2>
+        <h2 class="text-center mb-4">แก้ไขข้อมูลนักศึกษา (Student ID: <?= htmlspecialchars($std_id) ?>)</h2>
 
         <?php if (!empty($error)): ?>
             <div class="alert alert-danger">
@@ -94,19 +96,19 @@ else if (isset($_GET['id'])) {
         <?php endif; ?>
 
         <form action="edit.php" method="post">
-            <input type="hidden" name="id" value="<?= htmlspecialchars($student_id) ?>">
+            <input type="hidden" name="id" value="<?= htmlspecialchars($student_key) ?>">
             
             <div class="mb-3">
-                <label for="Fname" class="form-label">ชื่อ</label>
-                <input type="text" name="Fname" class="form-control" id="Fname" value="<?= htmlspecialchars($Fname) ?>" required>
+                <label for="f_name" class="form-label">ชื่อ</label>
+                <input type="text" name="f_name" class="form-control" id="f_name" value="<?= htmlspecialchars($f_name) ?>" required>
             </div>
             <div class="mb-3">
-                <label for="Lname" class="form-label">นามสกุล</label>
-                <input type="text" name="Lname" class="form-control" id="Lname" value="<?= htmlspecialchars($Lname) ?>" required>
+                <label for="l_name" class="form-label">นามสกุล</label>
+                <input type="text" name="l_name" class="form-control" id="l_name" value="<?= htmlspecialchars($l_name) ?>" required>
             </div>
             <div class="mb-3">
-                <label for="email" class="form-label">อีเมล</label>
-                <input type="email" name="email" class="form-control" id="email" value="<?= htmlspecialchars($email) ?>" required>
+                <label for="mail" class="form-label">อีเมล</label>
+                <input type="email" name="mail" class="form-control" id="mail" value="<?= htmlspecialchars($mail) ?>" required>
             </div>
             <div class="mb-3">
                 <label for="Tel" class="form-label">เบอร์โทร</label>
