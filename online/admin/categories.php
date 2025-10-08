@@ -180,7 +180,7 @@ try {
             <div class="card-body">
                 <form method="post" action="categories.php">
                     <div class="input-group">
-                        <input type="text" name="category_name" class="form-control" placeholder="เช่น หนังสือ, อุปกรณ์อิเล็กทรอนิกส์" required>
+                        <input type="text" name="category_name" class="form-control" placeholder="เช่น อาหารไทย, ของหวาน" required>
                         <button type="submit" name="add_category" class="btn btn-primary"><i class="bi bi-plus-lg btn-icon"></i>เพิ่ม</button>
                     </div>
                 </form>

@@ -26,7 +26,7 @@ require_once 'auth_admin.php'; // Ensure user is an admin
                     <a class="nav-link" href="products.php"><i class="bi bi-box-seam-fill"></i> Products</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="bi bi-receipt-cutoff"></i> Orders</a>
+                    <a class="nav-link" href="orders.php"><i class="bi bi-receipt-cutoff"></i> Orders</a>
                 </li>
             </ul>
             <div class="d-flex">

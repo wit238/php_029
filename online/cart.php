@@ -78,7 +78,7 @@ if (!empty($_SESSION['cart'])) {
             'price' => $product['price'],
             'quantity' => $quantity,
             'subtotal' => $subtotal,
-            'image_url' => $product['image_url'] ?? 'img/placeholder.png',
+            'image_url' => $product['image_url'] ?? 'img/default_avatar.png',
             'stock' => $product['stock']
         ];
     }
@@ -89,124 +89,120 @@ if (!empty($_SESSION['cart'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ตะกร้าสินค้า - The Shop</title>
+    <title>ตะกร้าของคุณ - FindYourMeal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
-            font-family: 'Kanit', sans-serif;
-            background-color: #2e2ebeff;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        .main-content {
-            flex: 1;
+            background-color: #F8F9FA;
+            font-family: 'Kanit', 'Poppins', sans-serif;
         }
         .cart-item-img {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             object-fit: cover;
-            border-radius: 0.5rem;
+            border-radius: 0.75rem;
         }
         .quantity-input {
-            width: 80px;
+            width: 70px;
         }
-        .footer {
-            background-color: #343a40;
-            color: #f8f9fa;
-            padding: 2rem 0;
-            margin-top: auto;
+        .summary-card, .cart-card {
+            background-color: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
         }
-        .card {
-            border-color: rgba(255,255,255,0.1) !important;
+        .btn-primary {
+            background-color: #E67E22;
+            border-color: #E67E22;
         }
+        .btn-primary:hover {
+            background-color: #D35400;
+            border-color: #D35400;
+        }
+        .footer { background-color: #343a40; color: #f8f9fa; padding: 2rem 0; }
     </style>
 </head>
 <body class="d-flex flex-column min-vh-100">
     <?php require_once 'navbar.php'; ?>
 
-    <div class="main-content container my-5">
-        <h1 class="mb-4 text-light" style="text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);">ตะกร้าสินค้าของคุณ</h1>
+    <div class="container my-5 flex-grow-1">
+        <h1 class="mb-4">ตะกร้าของคุณ</h1>
 
         <?php if (empty($cart_items)): ?>
-            <div class="card bg-dark text-light text-center p-5">
-                <div class="card-body">
-                    <h2 class="card-title">ตะกร้าสินค้าของคุณว่างเปล่า</h2>
-                    <p class="card-text text-white-50">ดูเหมือนว่าคุณยังไม่ได้เพิ่มสินค้าใดๆ ลงในตะกร้า</p>
-                    <a href="index.php" class="btn btn-primary mt-3"><i class="bi bi-arrow-left me-2"></i>กลับไปเลือกซื้อสินค้า</a>
-                </div>
+            <div class="text-center p-5 bg-white rounded-3 shadow-sm">
+                <i class="bi bi-cart-x" style="font-size: 5rem; color: #6c757d;"></i>
+                <h2 class="mt-4">ตะกร้าของคุณว่างเปล่า</h2>
+                <p class="text-muted">ไปหาเมนูอร่อยๆ เพิ่มลงตะกร้ากันเลย</p>
+                <a href="index.php" class="btn btn-primary mt-3"><i class="bi bi-arrow-left me-2"></i>กลับไปหน้าแรก</a>
             </div>
         <?php else: ?>
-            <form action="cart.php" method="post">
-                <div class="card bg-dark text-light p-4">
-                    <div class="table-responsive">
-                        <table class="table align-middle table-dark table-hover">
-                            <thead>
-                                <tr>
-                                    <th scope="col">สินค้า</th>
-                                    <th scope="col">ราคา</th>
-                                    <th scope="col" class="text-center">จำนวน</th>
-                                    <th scope="col" class="text-end">ราคารวม</th>
-                                    <th scope="col" class="text-center">ลบ</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($cart_items as $item): ?>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <img src="<?= htmlspecialchars($item['image_url']) ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="cart-item-img me-3">
-                                            <div>
-                                                <h6 class="mb-0"><?= htmlspecialchars($item['name']) ?></h6>
-                                                <small class="text-white-50">คงเหลือ: <?= $item['stock'] ?></small>
+            <div class="row g-5">
+                <div class="col-lg-8">
+                    <form action="cart.php" method="post" class="cart-card">
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">เมนู</th>
+                                        <th scope="col">ราคา</th>
+                                        <th scope="col" class="text-center">จำนวน</th>
+                                        <th scope="col" class="text-end">รวม</th>
+                                        <th scope="col" class="text-center"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($cart_items as $item): ?>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="<?= htmlspecialchars($item['image_url']) ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="cart-item-img me-3">
+                                                <div>
+                                                    <h6 class="mb-0"><?= htmlspecialchars($item['name']) ?></h6>
+                                                    <small class="text-muted">สต็อก: <?= $item['stock'] ?></small>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td>฿<?= number_format($item['price'], 2) ?></td>
-                                    <td class="text-center">
-                                        <input type="number" name="quantities[<?= $item['id'] ?>]" class="form-control form-control-sm quantity-input mx-auto bg-dark text-light" value="<?= $item['quantity'] ?>" min="1" max="<?= $item['stock'] ?>">
-                                    </td>
-                                    <td class="text-end">฿<?= number_format($item['subtotal'], 2) ?></td>
-                                    <td class="text-center">
-                                        <a href="cart.php?remove=<?= $item['id'] ?>" class="btn btn-sm btn-outline-danger" onclick="confirmDelete(event, this.href)"><i class="bi bi-trash-fill"></i></a>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center mt-3">
-                        <a href="index.php" class="btn btn-outline-light"><i class="bi bi-arrow-left me-2"></i>เลือกซื้อสินค้าต่อ</a>
-                        <button type="submit" name="update_cart" class="btn btn-info"><i class="bi bi-arrow-clockwise me-2"></i>อัปเดตตะกร้า</button>
-                    </div>
+                                        </td>
+                                        <td>฿<?= number_format($item['price'], 2) ?></td>
+                                        <td class="text-center">
+                                            <input type="number" name="quantities[<?= $item['id'] ?>]" class="form-control form-control-sm quantity-input mx-auto" value="<?= $item['quantity'] ?>" min="1" max="<?= $item['stock'] ?>">
+                                        </td>
+                                        <td class="text-end fw-bold">฿<?= number_format($item['subtotal'], 2) ?></td>
+                                        <td class="text-center">
+                                            <a href="cart.php?remove=<?= $item['id'] ?>" class="btn btn-sm btn-outline-danger" onclick="confirmDelete(event, this.href)"><i class="bi bi-trash-fill"></i></a>
+                                        </td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <a href="index.php" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-2"></i>เลือกเมนูเพิ่ม</a>
+                            <button type="submit" name="update_cart" class="btn btn-secondary"><i class="bi bi-arrow-clockwise me-2"></i>อัปเดตตะกร้า</button>
+                        </div>
+                    </form>
                 </div>
-            </form>
-
-            <div class="row mt-4 justify-content-end">
-                <div class="col-md-6 col-lg-5 col-xl-4">
-                    <div class="card bg-dark text-light">
-                        <div class="card-body">
-                            <h5 class="card-title mb-3">สรุปคำสั่งซื้อ</h5>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent text-light">
-                                    ราคาสินค้า
-                                    <span>฿<?= number_format($total_price, 2) ?></span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent text-light">
-                                    ค่าจัดส่ง
-                                    <span>ฟรี</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center px-0 fw-bold border-top pt-3 bg-transparent text-light border-secondary">
-                                    ยอดรวมทั้งสิ้น
-                                    <span>฿<?= number_format($total_price, 2) ?></span>
-                                </li>
-                            </ul>
-                            <div class="d-grid mt-4">
-                                <a href="checkout.php" class="btn btn-primary btn-lg"><i class="bi bi-credit-card-fill me-2"></i>ดำเนินการชำระเงิน</a>
-                            </div>
+                <div class="col-lg-4">
+                    <div class="summary-card sticky-top" style="top: 1.5rem;">
+                        <h4 class="mb-3">สรุปรายการ</h4>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                ยอดรวม
+                                <span>฿<?= number_format($total_price, 2) ?></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                ค่าจัดส่ง
+                                <span class="text-success">ฟรี</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center px-0 fw-bold border-top pt-3">
+                                ยอดสุทธิ
+                                <span>฿<?= number_format($total_price, 2) ?></span>
+                            </li>
+                        </ul>
+                        <div class="d-grid mt-4">
+                            <a href="checkout.php" class="btn btn-primary btn-lg"><i class="bi bi-credit-card-fill me-2"></i>ไปที่หน้าชำระเงิน</a>
                         </div>
                     </div>
                 </div>
@@ -214,10 +210,9 @@ if (!empty($_SESSION['cart'])) {
         <?php endif; ?>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
+    <footer class="footer mt-auto">
         <div class="container text-center">
-            <p>&copy; 664230029 Witthawat CH. 66/46</p>
+            <p class="mb-0">&copy; <?= date('Y') ?> FindYourMeal - 664230029 Witthawat CH. 66/46</p>
         </div>
     </footer>
 
@@ -226,8 +221,8 @@ if (!empty($_SESSION['cart'])) {
     function confirmDelete(event, url) {
         event.preventDefault();
         Swal.fire({
-            title: 'คุณแน่ใจหรือไม่?',
-            text: "คุณต้องการนำสินค้านี้ออกจากตะกร้าใช่ไหม?",
+            title: 'แน่ใจหรือไม่?',
+            text: "คุณต้องการนำรายการนี้ออกจากตะกร้าใช่ไหม?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#d33',

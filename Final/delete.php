@@ -9,8 +9,6 @@ if (isset($_GET['id'])) {
         // เตรียมคำสั่ง SQL สำหรับลบข้อมูล
         $sql = "DELETE FROM tb_664230029 WHERE `key` = ?";
         $stmt = $conn->prepare($sql);
-
-        // ทำการ execute โดยส่งค่า id เข้าไป
         $stmt->execute([$key]);
 
         // เมื่อลบสำเร็จ ให้ redirect กลับไปที่หน้าแรก

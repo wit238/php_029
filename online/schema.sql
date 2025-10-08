@@ -11,7 +11,7 @@ CREATE TABLE `users` (
   `email` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL,
   `role` enum('member','admin') NOT NULL DEFAULT 'member',
-  `profile_image` varchar(255) DEFAULT 'img/book.png',
+  `profile_image` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`username`),
@@ -118,6 +118,8 @@ INSERT INTO `users` (`username`, `full_name`, `email`, `password`, `role`) VALUE
 -- Inserting some sample categories
 --
 INSERT INTO `categories` (`category_name`, `description`) VALUES
-('Electronics', 'Gadgets, devices, and accessories.'),
-('Books', 'Fiction, non-fiction, and educational books.'),
-('Clothing', 'Apparel for men, women, and children.');
+('อาหารไทย', 'รสชาติจัดจ้านแบบไทยแท้'),
+('อาหารญี่ปุ่น', 'ต้นตำรับจากแดนอาทิตย์อุทัย'),
+('ของหวาน', 'เติมความสุขหลังมื้ออาหาร'),
+('เครื่องดื่ม', 'สดชื่น ดับกระหาย'),
+('สตรีทฟู้ด', 'อร่อยง่ายๆ ได้ทุกที่');
