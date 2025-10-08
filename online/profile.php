@@ -9,6 +9,13 @@ $user_id = $_SESSION['user_id'];
 $errors = [];
 $success = "";
 
+if (isset($_GET['update']) && $_GET['update'] === 'success') {
+    $success = "บันทึกข้อมูลเรียบร้อยแล้ว";
+}
+if (isset($_GET['upload']) && $_GET['upload'] === 'success') {
+    $success = "อัปเดตรูปโปรไฟล์สำเร็จ";
+}
+
 // Fetch user data first
 $stmt = $conn->prepare("SELECT * FROM users WHERE user_id = ?");
 $stmt->execute([$user_id]);
@@ -28,14 +35,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $new_filepath = $upload_dir . $new_filename;
 
             if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $new_filepath)) {
-                $default_image = 'img/default_avatar.png';
+                // Delete old image if it's not the default one
+                $default_image = 'img/book.png';
                 if ($user['profile_image'] && $user['profile_image'] != $default_image && file_exists($user['profile_image'])) {
                     unlink($user['profile_image']);
                 }
 
+                // Update database
                 $stmt_img = $conn->prepare("UPDATE users SET profile_image = ? WHERE user_id = ?");
                 $stmt_img->execute([$new_filepath, $user_id]);
-                $success = "อัปเดตรูปโปรไฟล์สำเร็จ";
+                header("Location: profile.php?upload=success");
+                exit;
             } else {
                 $errors[] = "ขออภัย, ไม่สามารถอัปโหลดไฟล์ได้";
             }
@@ -97,119 +107,111 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>โปรไฟล์ของฉัน - FindYourMeal</title>
+    <title>โปรไฟล์ของคุณ - The Shop</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        body {
-            background-color: #F8F9FA;
-            font-family: 'Kanit', 'Poppins', sans-serif;
-        }
-        .profile-card {
-            background-color: white;
-            border-radius: 20px;
-            padding: 2.5rem;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-        }
+        body { font-family: 'Kanit', sans-serif; background-color: #2e2ebeff; display: flex; flex-direction: column; min-height: 100vh; color: #f8f9fa; }
+        .main-content { flex: 1; }
+        .footer { background-color: #343a40; color: #f8f9fa; padding: 2rem 0; }
+        .profile-card { background-color: #212529; border-radius: 0.75rem; box-shadow: 0 4px 25px rgba(0, 0, 0, 0.2); padding: 2rem; }
+        .form-control { background-color: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); color: #f8f9fa; }
+        .form-control:focus { background-color: rgba(255,255,255,0.1); border-color: #80bdff; color: #f8f9fa; box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25); }
+        .form-control::placeholder { color: #ced4da; }
+        .form-label { color: #ced4da; }
+        hr { border-color: rgba(255,255,255,0.2); }
+        .btn-primary { background-color: #0d6efd; border-color: #0d6efd; }
+        .alert-success { background-color: #198754; color: white; border: none; }
+        .alert-danger { background-color: #dc3545; color: white; border: none; }
         .profile-image-container {
             width: 150px;
             height: 150px;
             border-radius: 50%;
             overflow: hidden;
             margin: 0 auto 1.5rem;
-            border: 5px solid #E67E22;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 4px solid #495057;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
         .profile-image-container img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        .form-control:focus, .form-control:active {
-            border-color: #E67E22;
-            box-shadow: 0 0 0 0.25rem rgba(230, 126, 34, 0.25);
-        }
-        .btn-primary {
-            background-color: #E67E22;
-            border-color: #E67E22;
-        }
-        .btn-primary:hover {
-            background-color: #D35400;
-            border-color: #D35400;
-        }
-        .footer { background-color: #343a40; color: #f8f9fa; padding: 2rem 0; }
     </style>
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body>
 
     <?php require_once 'navbar.php'; ?>
 
-    <div class="container my-5 flex-grow-1">
-        <h1 class="h2 mb-4">บัญชีของฉัน</h1>
-        <div class="profile-card">
-            <div class="row g-5">
-                <div class="col-lg-4 text-center border-end">
-                    <div class="profile-image-container">
-                        <img src="<?= htmlspecialchars($user['profile_image'] ?? 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%23E67E22\'%3E%3Cpath d=\'M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z\'/%3E%3C/svg%3E') ?>?v=<?= time() ?>" alt="Profile Image">
+    <div class="main-content">
+        <div class="container py-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h2" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);"><i class="bi bi-person-circle me-3"></i>โปรไฟล์ของคุณ</h1>
+                <a href="index.php" class="btn btn-outline-light"><i class="bi bi-arrow-left me-1"></i>กลับหน้าหลัก</a>
+            </div>
+
+            <?php if (!empty($errors)): ?>
+            <div class="alert alert-danger"><ul class="mb-0"><?php foreach ($errors as $e): ?><li><i class="bi bi-exclamation-triangle-fill me-2"></i><?= htmlspecialchars($e) ?></li><?php endforeach; ?></ul></div>
+            <?php elseif (!empty($success)): ?>
+            <div class="alert alert-success mb-4"><i class="bi bi-check-circle-fill me-2"></i><?= $success ?></div>
+            <?php endif; ?>
+
+            <div class="profile-card">
+                <div class="row">
+                    <div class="col-lg-4 text-center">
+                        <div class="profile-image-container">
+                            <img src="<?= htmlspecialchars($user['profile_image']) ?>?v=<?= time() ?>" alt="Profile Image">
+                        </div>
+                        <form method="post" enctype="multipart/form-data">
+                            <label for="profile_image" class="form-label">เปลี่ยนรูปโปรไฟล์</label>
+                            <input type="file" name="profile_image" id="profile_image" class="form-control mb-2">
+                            <button type="submit" class="btn btn-secondary btn-sm">อัปโหลดรูป</button>
+                        </form>
                     </div>
-                    <h4 class="mb-1"><?= htmlspecialchars($user['full_name']) ?></h4>
-                    <p class="text-muted">@<?= htmlspecialchars($user['username']) ?></p>
-                    <form method="post" enctype="multipart/form-data" class="mt-4">
-                        <label for="profile_image" class="form-label">อัปโหลดรูปใหม่</label>
-                        <input type="file" name="profile_image" id="profile_image" class="form-control form-control-sm mb-2">
-                        <button type="submit" class="btn btn-secondary btn-sm">อัปโหลด</button>
-                    </form>
-                </div>
-                <div class="col-lg-8">
-                    <h4 class="mb-4">แก้ไขข้อมูลส่วนตัว</h4>
-
-                    <?php if (!empty($errors)): ?>
-                        <div class="alert alert-danger"><ul class="mb-0"><?php foreach ($errors as $e): ?><li><i class="bi bi-exclamation-triangle-fill me-2"></i><?= htmlspecialchars($e) ?></li><?php endforeach; ?></ul></div>
-                    <?php elseif (!empty($success)): ?>
-                        <div class="alert alert-success mb-4"><i class="bi bi-check-circle-fill me-2"></i><?= $success ?></div>
-                    <?php endif; ?>
-
-                    <form method="post" class="row g-3">
-                        <input type="hidden" name="update_details" value="1">
-                        <div class="col-md-6">
-                            <label for="full_name" class="form-label">ชื่อ-นามสกุล</label>
-                            <input type="text" name="full_name" class="form-control" required value="<?= htmlspecialchars($user['full_name']) ?>">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="email" class="form-label">อีเมล</label>
-                            <input type="email" name="email" class="form-control" required value="<?= htmlspecialchars($user['email']) ?>">
-                        </div>
-                        <div class="col-12">
-                            <hr class="my-4">
-                            <h5 class="mb-3"><i class="bi bi-key-fill me-2"></i>เปลี่ยนรหัสผ่าน (ไม่จำเป็น)</h5>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="current_password" class="form-label">รหัสผ่านเดิม</label>
-                            <input type="password" name="current_password" id="current_password" class="form-control">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="new_password" class="form-label">รหัสผ่านใหม่ (≥ 6 ตัว)</label>
-                            <input type="password" name="new_password" id="new_password" class="form-control">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="confirm_password" class="form-label">ยืนยันรหัสผ่านใหม่</label>
-                            <input type="password" name="confirm_password" id="confirm_password" class="form-control">
-                        </div>
-                        <div class="col-12 mt-4 text-end">
-                            <button type="submit" class="btn btn-primary px-4"><i class="bi bi-save me-2"></i>บันทึกการเปลี่ยนแปลง</button>
-                        </div>
-                    </form>
+                    <div class="col-lg-8">
+                        <h4 class="mb-4">แก้ไขข้อมูลส่วนตัว</h4>
+                        <form method="post" class="row g-3">
+                            <input type="hidden" name="update_details" value="1">
+                            <div class="col-md-6">
+                                <label for="full_name" class="form-label">ชื่อ-นามสกุล</label>
+                                <input type="text" name="full_name" class="form-control" required value="<?= htmlspecialchars($user['full_name']) ?>">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">อีเมล</label>
+                                <input type="email" name="email" class="form-control" required value="<?= htmlspecialchars($user['email']) ?>">
+                            </div>
+                            <div class="col-12">
+                                <hr class="my-4">
+                                <h5 class="mb-3"><i class="bi bi-key-fill me-2"></i>เปลี่ยนรหัสผ่าน (ไม่จำเป็น)</h5>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="current_password" class="form-label">รหัสผ่านเดิม</label>
+                                <input type="password" name="current_password" id="current_password" class="form-control">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="new_password" class="form-label">รหัสผ่านใหม่ (≥ 6 ตัวอักษร)</label>
+                                <input type="password" name="new_password" id="new_password" class="form-control">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="confirm_password" class="form-label">ยืนยันรหัสผ่านใหม่</label>
+                                <input type="password" name="confirm_password" id="confirm_password" class="form-control">
+                            </div>
+                            <div class="col-12 mt-4 text-end">
+                                <button type="submit" class="btn btn-primary px-4"><i class="bi bi-save me-2"></i>บันทึกการเปลี่ยนแปลง</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <footer class="footer mt-auto">
+    <footer class="footer">
         <div class="container text-center">
-            <p class="mb-0">&copy; <?= date('Y') ?> FindYourMeal - 664230029 Witthawat CH. 66/46</p>
+            <p class="mb-0">664230029 Witthawat CH. 66/46</p>
         </div>
     </footer>
 
